@@ -8,11 +8,13 @@ public class TaskDto {
     @Schema(description = "ID задания", required = true, example = "1")
     private Long id;
     @Schema(description = "Название задания", required = true, example = "Сюжет")
-    private String name;
-    @Schema(description = "Имя пользователя", required = true, example = "Тимофей")
-    private String userName;
+    private String title;
+    @Schema(description = "Имя исполнителя", example = "Тимофей")
+    private String executorName;
+    @Schema(description = "Имя заказчика", required = true, example = "Тимофей")
+    private String ownerName;
     @Schema(description = "Текст задания", required = true, example = "Собрать сюжет: текст сюжета")
-    private String task;
+    private String taskDescription;
     @Schema(description = "Статус задания", required = true, example = "В работе")
     private String status;
 
@@ -25,27 +27,27 @@ public class TaskDto {
     }
 
     public String getName() {
-        return name;
+        return title;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.title = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getExecutorName() {
+        return executorName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setExecutorName(String userName) {
+        this.executorName = userName;
     }
 
-    public String getTask() {
-        return task;
+    public String getTaskDescription() {
+        return taskDescription;
     }
 
     public void setTask(String task) {
-        this.task = task;
+        this.taskDescription = task;
     }
 
     public String getStatus() {
@@ -56,11 +58,19 @@ public class TaskDto {
         this.status = status;
     }
 
-    public TaskDto(Long id, String name, String userName, String task, String status) {
+    public TaskDto(Long id, String title, String executorName, String ownerName, String task, String status) {
         this.id = id;
-        this.name = name;
-        this.userName = userName;
-        this.task = task;
+        this.title = title;
+        this.executorName = executorName;
+        this.ownerName = ownerName;
+        this.taskDescription = task;
+        this.status = status;
+    }
+    public TaskDto(Long id, String title, String ownerName, String task, String status) {
+        this.id = id;
+        this.title = title;
+        this.ownerName = ownerName;
+        this.taskDescription = task;
         this.status = status;
     }
 }

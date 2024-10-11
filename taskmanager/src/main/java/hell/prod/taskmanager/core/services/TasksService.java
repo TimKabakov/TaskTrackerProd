@@ -29,7 +29,7 @@ public class TasksService {
             spec = spec.and(TasksSpecifications.nameLike(partName));
         }
         if(partTaskName != null){
-            spec = spec.and(TasksSpecifications.taskNameLike(partTaskName));
+            spec = spec.and(TasksSpecifications.taskTitleLike(partTaskName));
         }
         return tasksRepository.findAll(spec, PageRequest.of(page-1,8));
     }
@@ -43,12 +43,12 @@ public class TasksService {
         tasksRepository.deleteById(id);
     }
     @Transactional
-    public Optional<Task> updateUser(Long taskId, String userName){
+    public Optional<Task> updateExecutor(Long taskId, String userName){
        Optional<Task> taskUpdate = tasksRepository.findById(taskId.describeConstable().orElseThrow(() ->
                new ResourceNotFoundExeption("Невозможно обновление задания, не найдено в базе")));
        if (taskUpdate.isPresent()){
-           User user = usersService.findByName(userName);
-           taskUpdate.get().setUser(user);
+           User executor = usersService.findByName(userName);
+           taskUpdate.get().setExecutor(executor);
        }
        return taskUpdate;
     }
@@ -57,7 +57,7 @@ public class TasksService {
         Optional<Task> taskUpdate = tasksRepository.findById(taskDto.getId().describeConstable().orElseThrow(() ->
                 new ResourceNotFoundExeption("Невозможно обновление задания, не найдено в базе, задача: " + taskDto.getName())));
         if (taskUpdate.isPresent()){
-            taskUpdate.get().setTask(taskDto.getTask());
+            taskUpdate.get().setTaskDescription(taskDto.getTaskDescription());
             return taskConverter.entityToDto(taskUpdate.get());
         }
         return taskDto;
@@ -70,7 +70,7 @@ public class TasksService {
     @Transactional
     public Task updateStatus(Task task){
         Optional<Task> taskUpdate = tasksRepository.findById(task.getId().describeConstable().orElseThrow(() ->
-                new ResourceNotFoundExeption("Невозможно обновление задания, не найдено в базе, задача: " + task.getName())));
+                new ResourceNotFoundExeption("Невозможно обновление задания, не найдено в базе, задача: " + task.getTitle())));
         if (taskUpdate.isPresent()){
             taskUpdate.get().setStatus(task.getStatus());
             return taskUpdate.get();

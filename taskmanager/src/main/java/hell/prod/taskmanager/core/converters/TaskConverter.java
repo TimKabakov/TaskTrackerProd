@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 public class TaskConverter {
 
     public TaskDto entityToDto(@NotNull Task task){
-        return new TaskDto(task.getId(), task.getName(), task.getUser().getName(), task.getTask(), task.getStatus().toString());
+        return new TaskDto(task.getId(), task.getTitle(), task.getExecutor().getName(),task.getOwner().getName(),
+            task.getTaskDescription(), task.getStatus().toString());
     }
 
 }

@@ -8,7 +8,7 @@ public class TasksSpecifications {
         return ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("user").get("name"), String.format("%%%s%%", namePart)));
     }
 
-    public static Specification<Task> taskNameLike(String taskNamePart) {
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), String.format("%%%s%%", taskNamePart)));
+    public static Specification<Task> taskTitleLike(String taskTitlePart) {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), String.format("%%%s%%", taskTitlePart)));
     }
 }

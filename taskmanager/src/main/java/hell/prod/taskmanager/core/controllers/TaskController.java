@@ -38,7 +38,7 @@ public class TaskController {
     public Page<TaskDto> getAllTasks(
             @RequestParam(name = "p", defaultValue = "1") Integer page,
             @RequestParam(name = "part_name", required = false) String partName,
-            @RequestParam(name = "part_task_name",required = false)String partTaskName
+            @RequestParam(name = "part_task_title",required = false)String partTaskName
     ){
         if(page<1){
             page = 1;
@@ -59,7 +59,7 @@ public class TaskController {
         return taskConverter.entityToDto(tasksService.findById(id).orElseThrow(() -> new ResourceNotFoundExeption("Задача не найдена" + id)));
     }
     @Operation(
-            summary = "Запрос на создание нового задания",
+            summary = "Запрос на получение задания",
             responses = {
                     @ApiResponse(
                             description = "Успешный ответ", responseCode = "200",
@@ -69,7 +69,7 @@ public class TaskController {
     )
     @PostMapping
     public TaskDto createNewTask(@RequestBody TaskDto taskDto){
-        Task task = new Task(taskDto.getId(),taskDto.getName(), taskDto.getTask(),
+        Task task = new Task(taskDto.getId(),taskDto.getName(), taskDto.getTaskDescription(),
                 usersService.findByName(taskDto.getName()), TaskStatus.fromString(taskDto.getStatus()));
         return taskConverter.entityToDto(tasksService.createTask(task));
     }

@@ -21,24 +21,28 @@ public class Task {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "task")
-    private String task;
+    @Column(name = "taskDescription")
+    private String taskDescription;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User executor;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User owner;
 
     @Column(name = "status")
     private TaskStatus status;
 
-    public Task(Long id, String name, String task, User user, TaskStatus status) {
+    public Task(Long id, String title, String taskDescription, User owner, TaskStatus status) {
         this.id = id;
-        this.name = name;
-        this.task = task;
-        this.user = user;
+        this.title = title;
+        this.taskDescription = taskDescription;
+        this.owner = owner;
         this.status = status;
     }
 
