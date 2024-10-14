@@ -37,13 +37,15 @@ public class TaskController {
     @GetMapping
     public Page<TaskDto> getAllTasks(
             @RequestParam(name = "p", defaultValue = "1") Integer page,
-            @RequestParam(name = "part_name", required = false) String partName,
+            @RequestParam(name = "part_owner_name", required = false) String partOwnerName,
+            @RequestParam(name = "part_executor_name", required = false) String partExecutorName,
+            @RequestParam(name = "status", required = false) String status,
             @RequestParam(name = "part_task_title",required = false)String partTaskName
     ){
         if(page<1){
             page = 1;
         }
-        return tasksService.findAll(partName,partTaskName, page).map(taskConverter::entityToDto);
+        return tasksService.findAll(partOwnerName, partExecutorName, partTaskName, status, page).map(taskConverter::entityToDto);
     }
     @Operation(
             summary = "Запрос на получение задачи по id",
@@ -74,9 +76,20 @@ public class TaskController {
         return taskConverter.entityToDto(tasksService.createTask(task));
     }
     @PutMapping
-    public TaskDto updateTask(@RequestBody TaskDto taskDto){
-        return tasksService.updateTask(taskDto);
+    public TaskDto updateTaskDescription(
+        @PathVariable @Parameter(description = "Идентификатор задачи", required = true) Long id,
+        @PathVariable @Parameter(description = "Текст задачи", required = true) String taskDescription
+    ){
+        return tasksService.updateTaskDescription(id, taskDescription);
     }
+    @PutMapping
+    public TaskDto updateTaskExecutor(
+        @PathVariable @Parameter(description = "Идентификатор задачи", required = true) Long id,
+        @PathVariable @Parameter(description = "Имя исполнителя для задачи", required = true) String executorName
+    ){
+        return tasksService.updateTaskExecutor(id, executorName);
+    }
+
 
     @DeleteMapping
     public void deleteById(@PathVariable Long id){

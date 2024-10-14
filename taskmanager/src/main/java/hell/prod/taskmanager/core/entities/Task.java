@@ -3,10 +3,10 @@ package hell.prod.taskmanager.core.entities;
 import hell.prod.taskmanager.core.utils.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
-
-import java.util.Objects;
-
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Table(name = "tasks")
@@ -35,8 +35,30 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User owner;
 
+
+    @ManyToMany
+    @JoinTable(
+        name = "tasks_users",
+        joinColumns = @JoinColumn(name = "task_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> candidates = new HashSet<>();
+
+
     @Column(name = "status")
     private TaskStatus status;
+
+    @CreationTimestamp
+    @Column(name = "creationTime")
+    private LocalDateTime createdAt;
+
+    @Column(name = "eventTime")
+    private LocalDateTime eventTime;
+
+    @Column(name = "executorFinishTime")
+    private LocalDateTime executorFinishTime;
+    @Column(name = "endTime")
+    private LocalDateTime endTime;
 
     public Task(Long id, String title, String taskDescription, User owner, TaskStatus status) {
         this.id = id;

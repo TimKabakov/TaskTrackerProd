@@ -23,13 +23,19 @@ public class TasksService {
     private final UsersService usersService;
     private final TaskConverter taskConverter;
 
-    public Page<Task> findAll(String partName,String partTaskName, Integer page){
+    public Page<Task> findAll(String partOwnerName,String partExecutorName,String partTaskName, String status, Integer page){
         Specification<Task> spec = Specification.where(null);
-        if(partName != null){
-            spec = spec.and(TasksSpecifications.nameLike(partName));
+        if(partOwnerName != null){
+            spec = spec.and(TasksSpecifications.ownerNameLike(partOwnerName));
+        }
+        if(partExecutorName != null){
+            spec = spec.and(TasksSpecifications.executorNameLike(partExecutorName));
         }
         if(partTaskName != null){
             spec = spec.and(TasksSpecifications.taskTitleLike(partTaskName));
+        }
+        if(status != null){
+            spec = spec.and(TasksSpecifications.taskStatus(status));
         }
         return tasksRepository.findAll(spec, PageRequest.of(page-1,8));
     }
@@ -43,24 +49,25 @@ public class TasksService {
         tasksRepository.deleteById(id);
     }
     @Transactional
-    public Optional<Task> updateExecutor(Long taskId, String userName){
-       Optional<Task> taskUpdate = tasksRepository.findById(taskId.describeConstable().orElseThrow(() ->
+    public TaskDto updateTaskExecutor(Long taskId, String executorName){
+       Optional<Task> taskToUpdate = tasksRepository.findById(taskId.describeConstable().orElseThrow(() ->
                new ResourceNotFoundExeption("Невозможно обновление задания, не найдено в базе")));
-       if (taskUpdate.isPresent()){
-           User executor = usersService.findByName(userName);
-           taskUpdate.get().setExecutor(executor);
+       if (taskToUpdate.isPresent()){
+           User executor = usersService.findByName(executorName);
+           taskToUpdate.get().setExecutor(executor);
+           return taskConverter.entityToDto(taskToUpdate.get());
        }
-       return taskUpdate;
+       return null;
     }
     @Transactional
-    public TaskDto updateTask(TaskDto taskDto){
-        Optional<Task> taskUpdate = tasksRepository.findById(taskDto.getId().describeConstable().orElseThrow(() ->
-                new ResourceNotFoundExeption("Невозможно обновление задания, не найдено в базе, задача: " + taskDto.getName())));
-        if (taskUpdate.isPresent()){
-            taskUpdate.get().setTaskDescription(taskDto.getTaskDescription());
-            return taskConverter.entityToDto(taskUpdate.get());
+    public TaskDto updateTaskDescription(Long taskId, String taskDescription){
+        Optional<Task> taskToUpdate = tasksRepository.findById(taskId.describeConstable().orElseThrow(() ->
+                new ResourceNotFoundExeption("Невозможно обновление задания, не найдено в базе, задача")));
+        if (taskToUpdate.isPresent()){
+            taskToUpdate.get().setTaskDescription(taskDescription);
+            return taskConverter.entityToDto(taskToUpdate.get());
         }
-        return taskDto;
+        return null;
     }
 
     public Task createTask(Task task){

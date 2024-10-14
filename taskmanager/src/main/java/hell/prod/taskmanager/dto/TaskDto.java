@@ -3,6 +3,9 @@ package hell.prod.taskmanager.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Schema(name = "Модель задания")
 public class TaskDto {
     @Schema(description = "ID задания", required = true, example = "1")
@@ -17,6 +20,8 @@ public class TaskDto {
     private String taskDescription;
     @Schema(description = "Статус задания", required = true, example = "В работе")
     private String status;
+    @Schema(description = "Список кандидатов", required = true, example = "{Андрей, Тимофей, Евгений}")
+    private List<String> candidateNames = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -28,6 +33,34 @@ public class TaskDto {
 
     public String getName() {
         return title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
+
+    public List<String> getCandidateNames() {
+        return candidateNames;
+    }
+
+    public void setCandidateNames(List<String> candidateNames) {
+        this.candidateNames = candidateNames;
     }
 
     public void setName(String name) {
@@ -58,19 +91,23 @@ public class TaskDto {
         this.status = status;
     }
 
-    public TaskDto(Long id, String title, String executorName, String ownerName, String task, String status) {
+    public TaskDto(Long id, String title, String executorName, String ownerName, String taskDescription, String status, List<String> candidateNames) {
         this.id = id;
         this.title = title;
         this.executorName = executorName;
         this.ownerName = ownerName;
-        this.taskDescription = task;
+        this.taskDescription = taskDescription;
         this.status = status;
+        this.candidateNames = candidateNames;
     }
-    public TaskDto(Long id, String title, String ownerName, String task, String status) {
+
+
+    public TaskDto(Long id, String title, String ownerName, String taskDescription, String status, List<String> candidateNames) {
         this.id = id;
         this.title = title;
         this.ownerName = ownerName;
-        this.taskDescription = task;
+        this.taskDescription = taskDescription;
         this.status = status;
+        this.candidateNames = candidateNames;
     }
 }
